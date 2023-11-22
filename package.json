@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-typescript-starter",
+  "name": "packageup",
   "version": "1.0.0",
-  "description": "",
+  "description": "Report your project rot and get regular updates on your project health.",
   "main": "index.js",  
   "scripts": {
     "build": "eslint . --ext .ts && tsc",
