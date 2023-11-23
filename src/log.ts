@@ -1,7 +1,7 @@
 import { hasArg } from "./args";
 
 export function writeError(message: string) {
-    console.error(message);
+    console.error('Error: '+message);
 }
 
 export function verbose(message: string) {

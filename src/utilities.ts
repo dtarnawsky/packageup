@@ -14,9 +14,23 @@ export async function run(commands: Array<string>, folder: string): Promise<void
     }
 }
 
-export async function getAsJson(command: string, folder: string) {    
-    const listJson = await getRunOutput(command, folder);
-    return JSON.parse(listJson);
+export async function getAsJson(command: string, folder: string) {
+    try {
+        const listJson = await getRunOutput(command, folder);
+        return JSON.parse(listJson);
+    } catch (err) {
+        verbose(`${command} returned ${err}`);
+        return undefined;
+    }
+}
+
+export async function getAsString(command: string, folder: string): Promise<string | undefined> {
+    try {
+        return await getRunOutput(command, folder);
+    } catch (err) {
+        verbose(`${command} returned ${err}`);
+        return undefined;
+    }
 }
 
 export async function getRunOutput(
