@@ -9,7 +9,8 @@
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "ts-node ./src/index.ts",
     "test": "jest",
-    "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'"
+    "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
+    "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'"
   },
   "keywords": [],
   "author": "",

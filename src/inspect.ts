@@ -25,7 +25,9 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
         const dep: ListDependency = npmList.dependencies[key];
         // dep.resolved contains the url to the package. Eg: https://registry.npmjs.org/zone.js/-/zone.js-0.14.2.tgz
         const packageInfo: DependencyInfo = { current: dep.version, latest: dep.version };
-        dependencies[key] = packageInfo;
+        if (!dep.extraneous) {
+            dependencies[key] = packageInfo;
+        }
     }
     for (const key of Object.keys(npmOutdated)) {
         const lib: OutdatedDependency = npmOutdated[key];
@@ -79,4 +81,5 @@ interface ListDependency {
     version: string;
     resolved: string; // Url eg https://registry.npmjs.org/@types/jest/-/jest-29.5.10.tgz
     overridden: boolean;
+    extraneous: boolean;
 }
