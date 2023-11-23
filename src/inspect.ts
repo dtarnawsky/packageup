@@ -60,7 +60,7 @@ export interface ProjectInfo {
     remoteUrl: string | undefined;
     dependencies: Record<string, DependencyInfo>;
 }
-interface DependencyInfo {
+export interface DependencyInfo {
     current: string; // eg 2.6.2
     latest: string; // eg 3.0.0
 }
