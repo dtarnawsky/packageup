@@ -22,6 +22,10 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
     let total = 0;
     let score = 0;
     let depScore = 0;
+    if (!project.dependencies) {
+        console.error(`The project has no dependencies.`);
+        return result;
+    }
     for (const key of Object.keys(project.dependencies)) {
         depScore = 100;
         const dep = project.dependencies[key];
@@ -61,6 +65,7 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
                 depScore = 0;
                 metric.notes.push(`${key} has an invalid version ${dep.latest} (current is ${dep.current})`);
             }
+            console.error(`Failed with ${key}:` + err);
         }
         score += depScore;
         total += 100;

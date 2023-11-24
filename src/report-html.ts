@@ -1,11 +1,9 @@
 
-import { writeFileSync } from "fs";
 import { ProjectResult } from "./analyze";
 import { getGauge } from "./gauge";
-import { write } from "./log";
 import { gaugeCss, generalCss } from "./gauge-css";
 
-export function outputHtml(project: ProjectResult) {
+export function outputHtml(project: ProjectResult): string {
     const issues = countIssues(project);
     let issuesNote = `and has ${issues} issues:`;
     if (issues == 0) {
@@ -37,10 +35,8 @@ export function outputHtml(project: ProjectResult) {
        Version ${project.project.version}. Created ${now()} by PackageUp
     </div>
     </div>
-    `;
-
-    writeFileSync('output.html', html, 'utf8');
-    write(`${project.project.name} scored ${project.score}%`);
+    `;    
+    return html;
 }
 
 function countIssues(project: ProjectResult): number {

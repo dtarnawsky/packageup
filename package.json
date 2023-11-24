@@ -9,13 +9,13 @@
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "ts-node ./src/index.ts",
     "test": "jest",
+    "deploy-worker": "cd worker/packageup && npm run deploy",
     "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
     "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'",
     "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
     "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",
     "sample5": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-create-react'",
     "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"
-    
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,8 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "semver": "7.5.4"
+    "@types/tiny-json-http": "^7.3.4",
+    "semver": "7.5.4",
+    "tiny-json-http": "^7.5.1"
   }
 }
