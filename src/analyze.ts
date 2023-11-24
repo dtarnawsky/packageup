@@ -3,7 +3,7 @@ import { ProjectInfo } from "./inspect";
 
 export interface ProjectResult {
     project: ProjectInfo;
-    notes: string[];
+    
     score: number;
     metrics: Record<string, Metric>;
 }
@@ -13,10 +13,11 @@ export interface Metric {
     score: number;
     total: number;
     count: number;
+    notes: string[];
 }
 
 export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
-    const result: ProjectResult = { project, notes: [], score: 0, metrics: {} };
+    const result: ProjectResult = { project, score: 0, metrics: {} };
     let total = 0;
     let score = 0;
     let depScore = 0;
@@ -27,7 +28,7 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
         try {
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {
-                result.notes.push(`${key} is behind ${majorDiff} version.`);
+                metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
                 switch (majorDiff) {
                     case 1: depScore = -50; break;
                     case 2: depScore = -100; break;
@@ -36,8 +37,8 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
             } else {
                 const minorDiff = minor(dep.latest) - minor(dep.current);
                 if (minorDiff > 0) {
-                    result.notes.push(`${key} could be updated from ${dep.current} to ${dep.latest}.`);
-                    depScore = 95;
+                    metric.notes.push(`<code>${key}</code> could be updated from ${dep.current} to ${dep.latest}.`);
+                    depScore = 99;
                 } else {
                     // Up to date enough
                     depScore = 100;
@@ -47,7 +48,7 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
             depScore = 100;
             if (`${err}`.includes('Invalid version')) {
                 depScore = 0;
-                result.notes.push(`${key} has an invalid version ${dep.latest} (current is ${dep.current})`);
+                metric.notes.push(`${key} has an invalid version ${dep.latest} (current is ${dep.current})`);
             }
         }
         score += depScore;
@@ -66,13 +67,20 @@ function setMetric(dep: string, metrics: Record<string, Metric>): Metric {
     if (dep.startsWith('cordova-plugin-')) name = 'Plugins';
     if (dep.startsWith('@capacitor/')) name = 'Plugins';
     if (dep.startsWith('capacitor-')) name = 'Plugins';
+    if (dep.startsWith('cordova-')) name = 'Plugins';
+    if (dep.includes('cordova.')) name = 'Plugins';
     if (dep.startsWith('@angular/')) name = 'Framework';
+    if (dep.startsWith('@angular-devkit/')) name = 'Framework';
+    if (dep.startsWith('@ionic/')) name = 'Ionic';
+    // if (dep.startsWith('karma-')) name = 'Testing';
+    // if (dep.startsWith('jasmine-')) name = 'Testing';
 
     switch (dep) {
         case '@angular/core': name = 'Framework'; break;
         case '@ionic/react':
         case '@ionic/vue':
         case '@ionic/angular': name = 'Ionic'; break;
+        // case 'cypress': name = 'Testing'; break;
         case '@capacitor/core':
         case '@capacitor/ios':
         case '@capacitor/android':
@@ -82,7 +90,7 @@ function setMetric(dep: string, metrics: Record<string, Metric>): Metric {
     }
 
     if (!metrics[name]) {
-        metrics[name] = { name, score: 0, total: 0, count: 0 };
+        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [] };
     }
     return metrics[name];
 }
