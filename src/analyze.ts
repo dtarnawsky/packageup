@@ -1,9 +1,9 @@
 import { major, minor } from "semver";
-import { ProjectInfo } from "./inspect";
+import { DependencyInfo, ProjectInfo } from "./inspect";
 
 export interface ProjectResult {
     project: ProjectInfo;
-    
+
     score: number;
     metrics: Record<string, Metric>;
 }
@@ -14,6 +14,7 @@ export interface Metric {
     total: number;
     count: number;
     notes: string[];
+    majorNote: string | undefined;
 }
 
 export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
@@ -24,20 +25,30 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
     for (const key of Object.keys(project.dependencies)) {
         depScore = 100;
         const dep = project.dependencies[key];
-        const metric = setMetric(key, result.metrics);
+        const metric = setMetric(key, dep, result.metrics);
         try {
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {
-                metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
+                //metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
+                metric.notes.push(`<code>${key} (v${major(dep.current)} > v${major(dep.latest)})</code>`);
+                const isFramework = metric.name == 'Framework';
+                if (isFramework) {
+                    if (key == '@angular/core') {
+                        metric.majorNote = `Migrate Angular from v${major(dep.current)} to v${major(dep.latest)}.`;
+                    }
+                }
+                if (key == '@capacitor/core') {
+                    metric.majorNote = `Migrate Capacitor from v${major(dep.current)} to v${major(dep.latest)}.`;
+                }
                 switch (majorDiff) {
-                    case 1: depScore = -50; break;
-                    case 2: depScore = -100; break;
-                    default: depScore = -200;
+                    case 1: depScore = isFramework ? 75 : 50; break;
+                    case 2: depScore = isFramework ? 50 : 20; break;
+                    default: depScore = isFramework ? 25 : 0;
                 }
             } else {
                 const minorDiff = minor(dep.latest) - minor(dep.current);
                 if (minorDiff > 0) {
-                    metric.notes.push(`<code>${key}</code> could be updated from ${dep.current} to ${dep.latest}.`);
+                    //metric.notes.push(`<code>${key}</code> could be updated from ${dep.current} to ${dep.latest}.`);
                     depScore = 99;
                 } else {
                     // Up to date enough
@@ -62,20 +73,25 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
     return result;
 }
 
-function setMetric(dep: string, metrics: Record<string, Metric>): Metric {
+function setMetric(dep: string, i: DependencyInfo, metrics: Record<string, Metric>): Metric {
     let name = 'Other';
-    if (dep.startsWith('cordova-plugin-')) name = 'Plugins';
-    if (dep.startsWith('@capacitor/')) name = 'Plugins';
-    if (dep.startsWith('capacitor-')) name = 'Plugins';
-    if (dep.startsWith('cordova-')) name = 'Plugins';
-    if (dep.includes('cordova.')) name = 'Plugins';
+    if (i.pluginType == 'Capacitor') name = 'Plugins';
+    if (i.pluginType == 'Cordova') name = 'Plugins';
     if (dep.startsWith('@angular/')) name = 'Framework';
     if (dep.startsWith('@angular-devkit/')) name = 'Framework';
+    if (dep.startsWith('@angular-eslint/')) name = 'Framework';
+    if (dep.startsWith('react-')) name = 'Framework';
+    if (dep.startsWith('vue-')) name = 'Framework';
+    if (dep.startsWith('@vue/')) name = 'Framework';
     if (dep.startsWith('@ionic/')) name = 'Ionic';
+    if (dep.startsWith('@awesome-cordova-plugins/')) name = 'Plugins';
+    if (dep.startsWith('@ionic-native/')) name = 'Plugins';
     // if (dep.startsWith('karma-')) name = 'Testing';
     // if (dep.startsWith('jasmine-')) name = 'Testing';
 
     switch (dep) {
+        case 'react':
+        case 'vue':
         case '@angular/core': name = 'Framework'; break;
         case '@ionic/react':
         case '@ionic/vue':
@@ -84,13 +100,14 @@ function setMetric(dep: string, metrics: Record<string, Metric>): Metric {
         case '@capacitor/core':
         case '@capacitor/ios':
         case '@capacitor/android':
+        case '@capacitor/cli':
         case 'cordova':
         case 'cordova-android':
         case 'cordova-ios': name = 'Platform'; break;
     }
 
     if (!metrics[name]) {
-        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [] };
+        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [], majorNote: undefined };
     }
     return metrics[name];
 }

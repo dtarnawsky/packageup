@@ -10,7 +10,12 @@
     "start": "ts-node ./src/index.ts",
     "test": "jest",
     "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
-    "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'"
+    "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'",
+    "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
+    "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",
+    "sample5": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-create-react'",
+    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"
+    
   },
   "keywords": [],
   "author": "",

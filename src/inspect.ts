@@ -1,6 +1,8 @@
+import { join } from "path";
 import { hasArg } from "./args";
 import { verbose, writeError } from "./log";
 import { getAsJson, getAsString } from "./utilities";
+import { existsSync, readFileSync, readdirSync } from "fs";
 
 export async function inspect(folder: string): Promise<ProjectInfo | undefined> {
     verbose(`Inspecting "${folder}"...`);
@@ -24,7 +26,7 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
     for (const key of Object.keys(npmList.dependencies)) {
         const dep: ListDependency = npmList.dependencies[key];
         // dep.resolved contains the url to the package. Eg: https://registry.npmjs.org/zone.js/-/zone.js-0.14.2.tgz
-        const packageInfo: DependencyInfo = { current: dep.version, latest: dep.version };
+        const packageInfo: DependencyInfo = { current: dep.version, latest: dep.version, pluginType: getPluginType(key, folder) };
         if (!dep.extraneous) {
             dependencies[key] = packageInfo;
         }
@@ -43,6 +45,57 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
         remoteUrl,
         dependencies
     };
+}
+
+function getPluginType(library: string, folder: string): PluginType {
+    let result: PluginType = 'Dependency';
+    const plugin = join(folder, 'node_modules', library, 'plugin.xml');
+    if (existsSync(plugin)) {
+        // Cordova based
+        result = 'Cordova';
+    }
+
+    const nmFolder = join(folder, 'node_modules', library);
+
+    let isPlugin = false;
+
+    if (existsSync(nmFolder)) {
+        isPlugin = markIfPlugin(nmFolder);
+        try {
+            readdirSync(nmFolder, { withFileTypes: true })
+                .filter((dirent) => dirent.isDirectory())
+                .map((dirent) => {
+                    const hasPlugin = markIfPlugin(join(nmFolder, dirent.name));
+                    if (hasPlugin) {
+                        isPlugin = true;
+                    }
+                });
+        } catch {
+            isPlugin = false;
+        }
+    }
+
+    // Look for capacitor only as well
+    if (isPlugin) {
+        result = 'Capacitor';
+    }
+    return result;
+}
+
+function markIfPlugin(folder: string): boolean {
+    const pkg = join(folder, 'package.json');
+    if (existsSync(pkg)) {
+        try {
+            const packages = JSON.parse(readFileSync(pkg, 'utf8'));
+            if (packages.capacitor?.ios || packages.capacitor?.android) {
+                return true;
+            }
+        } catch {
+            console.warn(`Unable to parse ${pkg}`);
+            return false;
+        }
+    }
+    return false;
 }
 
 function cleanUrl(url: string | undefined) {
@@ -65,7 +118,10 @@ export interface ProjectInfo {
 export interface DependencyInfo {
     current: string; // eg 2.6.2
     latest: string; // eg 3.0.0
+    pluginType: PluginType;
 }
+
+export type PluginType = 'Dependency' | 'Capacitor' | 'Cordova';
 
 // This is for npm outdated --json
 interface OutdatedDependency {

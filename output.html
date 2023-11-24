@@ -45,10 +45,42 @@
     max-width: 600px;
   }
 
+  a {
+    color: black;
+  }
+  a:link {
+    text-decoration: none;
+  }
+  ul {
+    margin: 0;
+  }
+
   body {
     font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
+    background-color: #EEE;
+    padding-top: 50px;
   }
-  
+
+  .page {
+     width: 600px;
+     background-color: white;
+     padding: 50px;
+     margin-left: auto;
+     margin-right: auto;
+     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  .topline {
+    border-top: 1px solid #EEE;
+    padding-top: 10px;    
+    margin-top:20px;
+  }
+
   h2 {
     text-align: center;
     font-size: 15px;
@@ -57,7 +89,8 @@
   h3 {
     text-align: left;
     font-size: 18px;
-    margin: 0;
+    margin-top: 22px;
+    margin-bottom: 5px;
   }
   
   progress {
@@ -66,23 +99,53 @@
     height: 0;
   }  
    
-  @keyframes Framework-progress {
-    to { --progress-value: 0; }
+  @keyframes Platform-progress {
+    to { --progress-value: 50; }
   }
      
-  .Framework {
+  .Platform {
     background: 
       radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
-      conic-gradient(#d50000 calc(var(--progress-value) * 1%), #c62828 0);
-    animation: Framework-progress 2s 1 forwards;
+      conic-gradient(#ffd600 calc(var(--progress-value) * 1%), #fffde7 0);
+    animation: Platform-progress 2s 1 forwards;
   }
   
-  .Framework::before {
-    animation: Framework-progress 2s 1 forwards;
+  .Platform::before {
+    animation: Platform-progress 2s 1 forwards;
+  }  
+   
+  @keyframes Plugins-progress {
+    to { --progress-value: 50; }
+  }
+     
+  .Plugins {
+    background: 
+      radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
+      conic-gradient(#ffd600 calc(var(--progress-value) * 1%), #fffde7 0);
+    animation: Plugins-progress 2s 1 forwards;
+  }
+  
+  .Plugins::before {
+    animation: Plugins-progress 2s 1 forwards;
+  }  
+   
+  @keyframes Ionic-progress {
+    to { --progress-value: 99; }
+  }
+     
+  .Ionic {
+    background: 
+      radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
+      conic-gradient(#00c853 calc(var(--progress-value) * 1%), #e8f5e9 0);
+    animation: Ionic-progress 2s 1 forwards;
+  }
+  
+  .Ionic::before {
+    animation: Ionic-progress 2s 1 forwards;
   }  
    
   @keyframes Other-progress {
-    to { --progress-value: 64; }
+    to { --progress-value: 74; }
   }
      
   .Other {
@@ -96,95 +159,33 @@
     animation: Other-progress 2s 1 forwards;
   }  
    
-  @keyframes Ionic-progress {
-    to { --progress-value: 0; }
+  @keyframes Framework-progress {
+    to { --progress-value: 94; }
   }
      
-  .Ionic {
+  .Framework {
     background: 
       radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
-      conic-gradient(#d50000 calc(var(--progress-value) * 1%), #c62828 0);
-    animation: Ionic-progress 2s 1 forwards;
+      conic-gradient(#00c853 calc(var(--progress-value) * 1%), #e8f5e9 0);
+    animation: Framework-progress 2s 1 forwards;
   }
   
-  .Ionic::before {
-    animation: Ionic-progress 2s 1 forwards;
-  }  
-   
-  @keyframes Platform-progress {
-    to { --progress-value: 0; }
-  }
-     
-  .Platform {
-    background: 
-      radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
-      conic-gradient(#d50000 calc(var(--progress-value) * 1%), #c62828 0);
-    animation: Platform-progress 2s 1 forwards;
-  }
-  
-  .Platform::before {
-    animation: Platform-progress 2s 1 forwards;
-  }  
-   
-  @keyframes Plugins-progress {
-    to { --progress-value: 72; }
-  }
-     
-  .Plugins {
-    background: 
-      radial-gradient(closest-side, white 79%, transparent 80% 100%, white 0),
-      conic-gradient(#ffd600 calc(var(--progress-value) * 1%), #fffde7 0);
-    animation: Plugins-progress 2s 1 forwards;
-  }
-  
-  .Plugins::before {
-    animation: Plugins-progress 2s 1 forwards;
+  .Framework::before {
+    animation: Framework-progress 2s 1 forwards;
   }  
   </style>
+    <div class="page">
     <div class="row">
-       <h1>amtrakmobile_ionicapp</h1>
+    <h1>Cs-vue-v7</h1>
     </div>
-    <div class="row">      
-       <h2>Version 5.2.1</h2>
-    </div>
-    <div class="row">
-       <p>Created 11/24/2023 6:12 AM</p>
-    </div>
-    <div class="metrics row">
+    <a href="https://github.com/dtarnawsky/cs-vue-v7.git" target="_blank"><div class="metrics row">
        
-    <div class="progress-bar-container">
-    <h2>
-      <label for="Framework">Framework</label>
-    </h2>
-    <div class="progress-bar Framework">
-      <progress id="Framework" min="0" max="100" value="0"></progress>
-    </div>
-  </div>
-
-    <div class="progress-bar-container">
-    <h2>
-      <label for="Other">Other</label>
-    </h2>
-    <div class="progress-bar Other">
-      <progress id="Other" min="0" max="100" value="64"></progress>
-    </div>
-  </div>
-
-    <div class="progress-bar-container">
-    <h2>
-      <label for="Ionic">Ionic</label>
-    </h2>
-    <div class="progress-bar Ionic">
-      <progress id="Ionic" min="0" max="100" value="0"></progress>
-    </div>
-  </div>
-
     <div class="progress-bar-container">
     <h2>
       <label for="Platform">Platform</label>
     </h2>
     <div class="progress-bar Platform">
-      <progress id="Platform" min="0" max="100" value="0"></progress>
+      <progress id="Platform" min="0" max="100" value="50"></progress>
     </div>
   </div>
 
@@ -193,32 +194,66 @@
       <label for="Plugins">Plugins</label>
     </h2>
     <div class="progress-bar Plugins">
-      <progress id="Plugins" min="0" max="100" value="72"></progress>
+      <progress id="Plugins" min="0" max="100" value="50"></progress>
     </div>
   </div>
 
+    <div class="progress-bar-container">
+    <h2>
+      <label for="Ionic">Ionic</label>
+    </h2>
+    <div class="progress-bar Ionic">
+      <progress id="Ionic" min="0" max="100" value="99"></progress>
+    </div>
+  </div>
+
+    <div class="progress-bar-container">
+    <h2>
+      <label for="Other">Other</label>
+    </h2>
+    <div class="progress-bar Other">
+      <progress id="Other" min="0" max="100" value="74"></progress>
+    </div>
+  </div>
+
+    <div class="progress-bar-container">
+    <h2>
+      <label for="Framework">Framework</label>
+    </h2>
+    <div class="progress-bar Framework">
+      <progress id="Framework" min="0" max="100" value="94"></progress>
+    </div>
+  </div>
+
+    </div></a>
+    <div class="notes">    
+       Cs-vue-v7 scored 72% and has 11 issues:
     </div>
     
-       
-        <div class="notes">
-           <h3>Framework</h3>
-        </div>
-        <div class="notes"><ul><li><code>@angular-devkit/build-angular</code> is behind 3 versions.</li><li><code>@angular/cli</code> is behind 3 versions.</li><li><code>@angular/common</code> is behind 3 versions.</li><li><code>@angular/compiler-cli</code> is behind 3 versions.</li><li><code>@angular/compiler</code> is behind 3 versions.</li><li><code>@angular/core</code> is behind 3 versions.</li><li><code>@angular/forms</code> is behind 3 versions.</li><li><code>@angular/language-service</code> is behind 3 versions.</li><li><code>@angular/platform-browser-dynamic</code> is behind 3 versions.</li><li><code>@angular/platform-browser</code> is behind 3 versions.</li><li><code>@angular/router</code> is behind 3 versions.</li></ul></div>
-        <div class="notes">
-           <h3>Other</h3>
-        </div>
-        <div class="notes"><ul><li><code>@awesome-cordova-plugins/core</code> is behind 1 version.</li><li><code>@ionic-enterprise/auth</code> is behind 2 versions.</li><li><code>@types/jasmine</code> is behind 2 versions.</li><li><code>@types/node</code> is behind 8 versions.</li><li><code>braintree-web</code> could be updated from 3.86.0 to 3.97.3.</li><li><code>core-js</code> is behind 1 version.</li><li><code>cypress</code> is behind 2 versions.</li><li><code>jasmine-core</code> is behind 2 versions.</li><li><code>jasmine-spec-reporter</code> is behind 2 versions.</li><li><code>karma-chrome-launcher</code> could be updated from 3.1.1 to 3.2.0.</li><li><code>karma-jasmine-html-reporter</code> is behind 1 version.</li><li><code>karma-jasmine</code> is behind 1 version.</li><li><code>ngx-mask</code> is behind 5 versions.</li><li><code>rxjs</code> is behind 1 version.</li><li><code>ts-node</code> is behind 3 versions.</li><li><code>tslib</code> could be updated from 2.4.0 to 2.6.2.</li><li><code>typescript</code> is behind 1 version.</li><li><code>xml2js</code> could be updated from 0.4.23 to 0.6.2.</li><li><code>zone.js</code> could be updated from 0.11.8 to 0.14.2.</li></ul></div>
-        <div class="notes">
-           <h3>Ionic</h3>
-        </div>
-        <div class="notes"><ul><li><code>@ionic/angular-toolkit</code> is behind 5 versions.</li><li><code>@ionic/angular</code> is behind 1 version.</li><li><code>@ionic/storage</code> is behind 2 versions.</li></ul></div>
         <div class="notes">
            <h3>Platform</h3>
         </div>
-        <div class="notes"><ul><li><code>cordova-android</code> is behind 1 version.</li><li><code>cordova-ios</code> is behind 1 version.</li></ul></div>
         <div class="notes">
-           <h3>Plugins</h3>
+        Migrate Capacitor from v4 to v5.<br/><br/>
         </div>
-        <div class="notes"><ul><li><code>cordova-launch-review</code> is behind 1 version.</li><li><code>cordova-plugin-androidx</code> is behind 1 version.</li><li><code>cordova-plugin-file</code> is behind 2 versions.</li><li><code>cordova-plugin-geolocation</code> is behind 1 version.</li><li><code>cordova-plugin-inappbrowser</code> is behind 1 version.</li><li><code>cordova-plugin-nativegeocoder</code> could be updated from 3.4.1 to 3.5.1.</li><li><code>cordova-plugin-network-information</code> is behind 1 version.</li><li><code>cordova.plugins.diagnostic</code> could be updated from 7.0.0 to 7.1.4.</li></ul></div>
-    
+        
+        <div class="notes">
+        <h3>Plugins</h3>
+        </div>
+        <div class="notes">
+        <ul><li><code>@capacitor/app (v4 > v5)</code></li><li><code>@capacitor/haptics (v4 > v5)</code></li><li><code>@capacitor/keyboard (v4 > v5)</code></li><li><code>@capacitor/status-bar (v4 > v5)</code></li></ul></div>
+        <div class="notes">
+        <h3>Other Dependencies</h3>
+        </div>
+        <div class="notes">
+        <ul><li><code>@vitejs/plugin-legacy (v4 > v5)</code></li><li><code>cypress (v12 > v13)</code></li><li><code>jsdom (v21 > v22)</code></li><li><code>typescript (v4 > v5)</code></li><li><code>vite (v4 > v5)</code></li></ul></div>
+        <div class="notes">
+        <h3>Framework</h3>
+        </div>
+        <div class="notes">
+        <ul><li><code>@vue/eslint-config-typescript (v11 > v12)</code></li></ul></div>
+    <div class="notes topline">    
+       Version 0.0.1. Created on 11/24/2023 at 9:46am by PackageUp
+    </div>
+    </div>
     

@@ -46,10 +46,42 @@ export function generalCss() {
     max-width: 600px;
   }
 
+  a {
+    color: black;
+  }
+  a:link {
+    text-decoration: none;
+  }
+  ul {
+    margin: 0;
+  }
+
   body {
     font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
+    background-color: #EEE;
+    padding-top: 50px;
   }
-  
+
+  .page {
+     width: 600px;
+     background-color: white;
+     padding: 50px;
+     margin-left: auto;
+     margin-right: auto;
+     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  .topline {
+    border-top: 1px solid #EEE;
+    padding-top: 10px;    
+    margin-top:20px;
+  }
+
   h2 {
     text-align: center;
     font-size: 15px;
@@ -58,7 +90,8 @@ export function generalCss() {
   h3 {
     text-align: left;
     font-size: 18px;
-    margin: 0;
+    margin-top: 22px;
+    margin-bottom: 5px;
   }
   
   progress {
