@@ -34,7 +34,7 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {
                 //metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
-                metric.notes.push(`<code>${key} (v${major(dep.current)} > v${major(dep.latest)})</code>`);
+                metric.notes.push(`${key} (v${major(dep.current)} > v${major(dep.latest)})`);
                 const isFramework = metric.name == 'Framework';
                 if (isFramework) {
                     if (key == '@angular/core') {

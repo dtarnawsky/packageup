@@ -7,7 +7,10 @@ export async function sendMail(toAddress: string, subject: string, body: string)
         body: JSON.stringify({
             personalizations: [
                 {
-                    to: [{ email: toAddress, name: 'Packageup User' }],
+                    to: [{
+                        email: toAddress,
+                        name: 'Packageup User'
+                    }],
                 },
             ],
             from: {

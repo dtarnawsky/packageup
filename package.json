@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Report your project rot and get regular updates on your project health.",
   "main": "index.js",
+  "files": ["dist/**/*"],
+  "bin": {"packageup": "./dist/index.js"},
   "scripts": {
     "build": "eslint . --ext .ts && tsc",
     "lint": "eslint . --ext .ts",
@@ -11,6 +13,7 @@
     "test": "jest",
     "deploy-worker": "cd worker/packageup && npm run deploy",
     "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
+    "sample-html": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd' --type html",
     "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'",
     "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
     "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",

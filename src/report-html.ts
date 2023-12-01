@@ -2,6 +2,7 @@
 import { ProjectResult } from "./analyze";
 import { getGauge } from "./gauge";
 import { gaugeCss, generalCss } from "./gauge-css";
+import { countIssues, now, toTitleCase } from "./report";
 
 export function outputHtml(project: ProjectResult): string {
     const issues = countIssues(project);
@@ -13,13 +14,14 @@ export function outputHtml(project: ProjectResult): string {
         issuesNote = `and has 1 issue:`;
     }
 
-    let html = '';
+    let html = '<html>';
     html += `<style>${generalCss()}`;
     for (const key of Object.keys(project.metrics)) {
         html += `${gaugeCss(key, project.metrics[key].score)}`;
     }
     html += `</style>`;
     html += `
+    <body>
     <div class="page">
     <div class="row">
     <h1>${toTitleCase(project.project.name)}</h1>
@@ -32,24 +34,16 @@ export function outputHtml(project: ProjectResult): string {
     </div>
     ${notes(project)}
     <div class="notes topline">    
-       Version ${project.project.version}. Created ${now()} by PackageUp
+       Version ${project.project.version}. Created on ${now()} by PackageUp
     </div>
     </div>
+    </body>
+    </html>
     `;    
     return html;
 }
 
-function countIssues(project: ProjectResult): number {
-    let count = 0;
-    for (const key of Object.keys(project.metrics)) {
-        if (project.metrics[key].majorNote) {
-            count++;
-        } else {
-            count += project.metrics[key].notes.length;
-        }
-    }
-    return count;
-}
+
 
 function notes(project: ProjectResult) {
     let html = ''
@@ -88,20 +82,5 @@ function metrics(project: ProjectResult) {
     return html;
 }
 
-function now() {
-    return `on ${new Date().toLocaleDateString()} at ${time()}`;
-}
 
-function time() {
-    return new Date().toLocaleTimeString([], { timeStyle: 'short' }).toLowerCase().replace(' ', '');
-}
-
-function toTitleCase(str: string): string {
-    return str.replace(
-      /\w\S*/g,
-      function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-      }
-    );
-  }
 

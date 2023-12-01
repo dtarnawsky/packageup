@@ -46,11 +46,13 @@ export default {
 					console.log('Reporting...');
 					const html = await report(projectResults, { type: 'html' });
 					console.log('Sending...');
-					const res = await sendMail('damiantarnawsky@gmail.com', '[packageup] Report for ${project}', html);
+					const res = await sendMail(
+						'damiantarnawsky@gmail.com',
+						`[packageup] Report for ${project.name} v${project.version}`, html);
 					return new Response(res ? res : '');
 				}
-				} catch (err) {
-				console.error(`Failed to analyze: `+err);
+			} catch (err) {
+				console.error(`Failed to analyze: ` + err);
 				return new Response('Failure');
 
 			}
