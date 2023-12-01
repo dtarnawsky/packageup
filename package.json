@@ -1,7 +1,7 @@
 {
   "name": "packageup",
-  "version": "1.0.0",
-  "description": "Report your project rot and get regular updates on your project health.",
+  "version": "0.0.1",
+  "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": ["dist/**/*"],
   "bin": {"packageup": "./dist/index.js"},

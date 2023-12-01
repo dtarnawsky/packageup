@@ -1,12 +1,22 @@
 # PackageUp
 
-- `npm run sample` runs a test execution of the CLI.
+PackageUp creates Health reports for your project to help you keep it up to date.
 
-## Parameters
+## Getting Started
+Run `npx packageup` in your project's folder.
+
+This will create a health report file called `package-health.md`.
+
+## Arguments
+- `--type html` - This will generate a `package-health.html` file instead.
+
+## Advanced Arguments
 - `--verbose` extra logging
 - `--path` path to the projects package.json otherwise uses current folder
 
-## Scripts
+## Contributing
+
+Install with `npm install` and use these commands to test and develop.
 
 - `npm run build` to lint and build the app
 - `npm run dev` to start the app with hot-reload
