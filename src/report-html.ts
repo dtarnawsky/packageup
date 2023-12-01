@@ -66,7 +66,8 @@ function notes(project: ProjectResult) {
         <div class="notes">
         <ul>`;
             for (const note of project.metrics[key].notes) {
-                html += `<li>${note}</li>`;
+
+                html += `<li><code>${note.dependency}</code> - ${note.notes}</li>`;
             }
             html += '</ul></div>';
         }

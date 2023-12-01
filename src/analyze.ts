@@ -1,24 +1,39 @@
 import { major, minor } from "semver";
 import { DependencyInfo, ProjectInfo } from "./inspect";
+import { RecommendationType, RuleSet } from "./analyze-ruleset";
+import { verbose, writeError } from "./log";
 
 export interface ProjectResult {
     project: ProjectInfo;
-
-    score: number;
-    metrics: Record<string, Metric>;
+    filename: string | undefined; // Filename the results were written to
+    score: number; // Overall project score
+    metrics: Record<string, Metric>; // Score by group
 }
+
 
 export interface Metric {
     name: string;
     score: number;
     total: number;
+    weight: number;
     count: number;
-    notes: string[];
+    notes: Recommendation[];
     majorNote: string | undefined;
 }
 
-export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
-    const result: ProjectResult = { project, score: 0, metrics: {} };
+export interface Recommendation {
+    type: RecommendationType
+    priority: PriorityType
+    notes: string
+    dependency?: string
+}
+
+
+export type PriorityType = 'Normal' | 'High';
+
+export async function analyze(project: ProjectInfo, ruleSet: RuleSet): Promise<ProjectResult> {
+    validate(ruleSet);
+    const result: ProjectResult = { project, score: 0, metrics: {}, filename: undefined };
     let total = 0;
     let score = 0;
     let depScore = 0;
@@ -29,30 +44,36 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
     for (const key of Object.keys(project.dependencies)) {
         depScore = 100;
         const dep = project.dependencies[key];
-        const metric = setMetric(key, dep, result.metrics);
+        const metric = setMetric(key, dep, result.metrics, ruleSet);
         try {
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {
                 //metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
-                metric.notes.push(`${key} (v${major(dep.current)} > v${major(dep.latest)})`);
-                const isFramework = metric.name == 'Framework';
-                if (isFramework) {
-                    if (key == '@angular/core') {
-                        metric.majorNote = `Migrate Angular from v${major(dep.current)} to v${major(dep.latest)}.`;
+                metric.notes.push(
+                    {
+                        dependency: key,
+                        type: 'Major',
+                        priority: 'Normal',
+                        notes: `Update from v${major(dep.current)} to v${major(dep.latest)}`
+                    }
+                );
+                for (const rule of ruleSet.rules) {
+                    if (rule.dependency == key && rule.type == 'Major') {
+                        metric.majorNote = replace(rule.note, [
+                            `@current=${major(dep.current)}`,
+                            `@latest=${major(dep.latest)}`
+                        ]);
+
                     }
                 }
-                if (key == '@capacitor/core') {
-                    metric.majorNote = `Migrate Capacitor from v${major(dep.current)} to v${major(dep.latest)}.`;
-                }
                 switch (majorDiff) {
-                    case 1: depScore = isFramework ? 75 : 50; break;
-                    case 2: depScore = isFramework ? 50 : 20; break;
-                    default: depScore = isFramework ? 25 : 0;
+                    case 1: depScore = 50; break;
+                    case 2: depScore = 20; break;
+                    default: depScore = 0;
                 }
             } else {
                 const minorDiff = minor(dep.latest) - minor(dep.current);
                 if (minorDiff > 0) {
-                    //metric.notes.push(`<code>${key}</code> could be updated from ${dep.current} to ${dep.latest}.`);
                     depScore = 99;
                 } else {
                     // Up to date enough
@@ -63,12 +84,18 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
             depScore = 100;
             if (`${err}`.includes('Invalid version')) {
                 depScore = 0;
-                metric.notes.push(`${key} has an invalid version ${dep.latest} (current is ${dep.current})`);
+                metric.notes.push({
+                    type: 'Error',
+                    priority: 'Normal',
+                    dependency: key,
+                    notes: `${key} has an invalid version ${dep.latest} (current is ${dep.current})`
+
+                });
             }
             console.error(`Failed with ${key}:` + err);
         }
-        score += depScore;
-        total += 100;
+        score += depScore * metric.weight;
+        total += 100 * metric.weight;
         metric.count += depScore;
         metric.total += 100;
         metric.score = Math.trunc(metric.count * 100.0 / metric.total);
@@ -78,41 +105,56 @@ export async function analyze(project: ProjectInfo): Promise<ProjectResult> {
     return result;
 }
 
-function setMetric(dep: string, i: DependencyInfo, metrics: Record<string, Metric>): Metric {
+function setMetric(dep: string, i: DependencyInfo, metrics: Record<string, Metric>, ruleSet: RuleSet): Metric {
     let name = 'Other';
-    if (i.pluginType == 'Capacitor') name = 'Plugins';
-    if (i.pluginType == 'Cordova') name = 'Plugins';
-    if (dep.startsWith('@angular/')) name = 'Framework';
-    if (dep.startsWith('@angular-devkit/')) name = 'Framework';
-    if (dep.startsWith('@angular-eslint/')) name = 'Framework';
-    if (dep.startsWith('react-')) name = 'Framework';
-    if (dep.startsWith('vue-')) name = 'Framework';
-    if (dep.startsWith('@vue/')) name = 'Framework';
-    if (dep.startsWith('@ionic/')) name = 'Ionic';
-    if (dep.startsWith('@awesome-cordova-plugins/')) name = 'Plugins';
-    if (dep.startsWith('@ionic-native/')) name = 'Plugins';
-    // if (dep.startsWith('karma-')) name = 'Testing';
-    // if (dep.startsWith('jasmine-')) name = 'Testing';
-
-    switch (dep) {
-        case 'react':
-        case 'vue':
-        case '@angular/core': name = 'Framework'; break;
-        case '@ionic/react':
-        case '@ionic/vue':
-        case '@ionic/angular': name = 'Ionic'; break;
-        // case 'cypress': name = 'Testing'; break;
-        case '@capacitor/core':
-        case '@capacitor/ios':
-        case '@capacitor/android':
-        case '@capacitor/cli':
-        case 'cordova':
-        case 'cordova-android':
-        case 'cordova-ios': name = 'Platform'; break;
+    let weight = 1;
+    for (const rule of ruleSet.metricRules) {
+        if (rule.pluginTypes) {
+            for (const pluginType of rule.pluginTypes) {
+                if (i.pluginType == pluginType) {
+                    name = rule.metricTypeName;
+                }
+            }
+        }
+        if (rule.dependencies) {
+            for (const dependency of rule.dependencies) {
+                if (dependency.endsWith('*')) {
+                    if (dep.startsWith(dependency.replace('*', ''))) {
+                        name = rule.metricTypeName;
+                    }
+                } else if (dep == dependency) {
+                    name = rule.metricTypeName;
+                }
+            }
+        }
     }
-
+    for (const metric of ruleSet.metrics) {
+        if (metric.name == name) {
+            weight = metric.weight;
+        }
+    }
+    verbose(`${dep} is ${name} with weight ${weight}`);
     if (!metrics[name]) {
-        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [], majorNote: undefined };
+        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [], majorNote: undefined, weight };
     }
     return metrics[name];
+}
+
+function validate(ruleSet: RuleSet) {
+    for (const rule of ruleSet.metricRules) {
+        const metricTypeName = ruleSet.metrics.find((metric) => metric.name == rule.metricTypeName);
+        if (!metricTypeName) {
+            writeError(`Ruleset has a metricRule with name "${rule.metricTypeName}" that is not defined in metrics.`);
+            process.exit(1);
+        }
+    }
+}
+
+function replace(note: string, keyValues: string[]): string {
+    let result = note;
+    for (const keyVal of keyValues) {
+        const kv = keyVal.split('=');
+        result = result.replace(kv[0], kv[1]);
+    }
+    return result;
 }
