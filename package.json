@@ -1,10 +1,10 @@
 {
-  "name": "packageup",
+  "name": "pkup",
   "version": "0.0.1",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": ["dist/**/*"],
-  "bin": {"packageup": "./dist/index.js"},
+  "bin": {"pkup": "./dist/index.js"},
   "scripts": {
     "build": "eslint . --ext .ts && tsc",
     "lint": "eslint . --ext .ts",

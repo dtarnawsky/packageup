@@ -3,7 +3,7 @@
 PackageUp creates Health reports for your project to help you keep it up to date.
 
 ## Getting Started
-Run `npx packageup` in your project's folder.
+Run `npx pkup` in your project's folder.
 
 This will create a health report file called `package-health.md`.
 
