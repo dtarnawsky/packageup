@@ -1,6 +1,6 @@
 # PackageUp
 
-PackageUp creates Health reports for your project to help you keep it up to date.
+[PackageUp](https://packageup.io) creates Health reports for your project to help you keep it up to date.
 
 ## Getting Started
 Run `npx pkup` in your project's folder.
@@ -17,10 +17,11 @@ This will create a health report outputed to the command line.
 
 # Roadmap
 This are some ideas for features to be implemented:
-- Argument to send results via email
-- Only send out emails monthly
-- Add Security Vulnerabilities
-- Expose the ruleset json so you can define your own rules
-- Rules for recommended replacement packages
-- Detect deprecated packages
-- Detect unmaintained packages
+1. Argument to send results via email
+1. Only send out emails monthly
+1. Rules for recommended replacement packages
+1. Detect deprecated packages
+1. Detect unmaintained packages
+1. Add Security Vulnerabilities
+1. Expose the ruleset json so you can define your own rules
+
