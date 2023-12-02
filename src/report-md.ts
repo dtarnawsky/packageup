@@ -1,5 +1,5 @@
 import { Metric, ProjectResult } from "./analyze";
-import { countIssues, now, toTitleCase } from "./report";
+import { color, countIssues, now, toTitleCase } from "./report";
 
 export function outputMd(result: ProjectResult): string {
     const issues = countIssues(result);
@@ -12,8 +12,7 @@ export function outputMd(result: ProjectResult): string {
     md += `## Scores\n`;
     md += `Your project scored ${result.score}% overall based on these categories:\n\n`;
 
-    for (const key of metricList(result.metrics)) {
-        // md += `${gaugeMd(key, result.metrics[key].score)}\n`;
+    for (const key of metricList(result.metrics)) {        
         md += `- :${color(result.metrics[key].score)}_circle: ${key} - ${result.metrics[key].score}%\n`;
     }
     if (issues) {
@@ -34,16 +33,6 @@ function gaugeMd(name: string, score: number, large = false): string {
     //return `- **${name}** - ${score}%`;
 }
 
-function color(score: number): string {
-    if (score <= 25) {
-        return 'red';
-    } else if (score <= 50) {
-        return 'orange';
-    } else if (score <= 75) {
-        return 'yellow';
-    } else return 'green';
-}
-
 function notes(result: ProjectResult) {
     let md = ''
     for (const key of Object.keys(result.metrics)) {
@@ -53,7 +42,7 @@ function notes(result: ProjectResult) {
     }
     for (const key of Object.keys(result.metrics)) {
         if (!result.metrics[key].majorNote) {
-            for (const note of result.metrics[key].notes) {
+            for (const note of result.metrics[key].recommendations) {
                 md += `1. :orange_circle: \`${note.dependency}\` - ${note.notes}\n`;
             }
         }

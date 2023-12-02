@@ -12,7 +12,7 @@
     "start": "ts-node ./src/index.ts",
     "test": "jest",
     "deploy-worker": "cd worker/packageup && npm run deploy",
-    "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd' --verbose",
+    "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
     "sample-html": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd' --type html",
     "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'",
     "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",

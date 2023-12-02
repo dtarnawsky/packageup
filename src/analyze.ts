@@ -17,7 +17,7 @@ export interface Metric {
     total: number;
     weight: number;
     count: number;
-    notes: Recommendation[];
+    recommendations: Recommendation[];
     majorNote: string | undefined;
 }
 
@@ -48,24 +48,34 @@ export async function analyze(project: ProjectInfo, ruleSet: RuleSet): Promise<P
         try {
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {
-                //metric.notes.push(`<code>${key}</code> is behind ${majorDiff} version${majorDiff > 1 ? 's' : ''}.`);
-                metric.notes.push(
+                let priority: PriorityType = 'Normal';
+                let notes = `Update from v@current to v@latest`;
+                const vars =
+                [
+                    `@current=${major(dep.current)}`,
+                    `@latest=${major(dep.latest)}`,
+                    `@dep=${key}`
+                ];
+                for (const rule of ruleSet.rules) {
+                    if (rule.dependency == key) {
+                        if (rule.type == 'Major') {
+                            metric.majorNote = replace(rule.note, vars);
+                        }
+                        if (rule.type == 'Important') {
+                            priority = 'High';
+                            notes = rule.note;
+                        }
+                    }
+                }                
+                notes = replace(notes, vars);
+                metric.recommendations.push(
                     {
                         dependency: key,
                         type: 'Major',
-                        priority: 'Normal',
-                        notes: `Update from v${major(dep.current)} to v${major(dep.latest)}`
+                        priority,
+                        notes
                     }
                 );
-                for (const rule of ruleSet.rules) {
-                    if (rule.dependency == key && rule.type == 'Major') {
-                        metric.majorNote = replace(rule.note, [
-                            `@current=${major(dep.current)}`,
-                            `@latest=${major(dep.latest)}`
-                        ]);
-
-                    }
-                }
                 switch (majorDiff) {
                     case 1: depScore = 50; break;
                     case 2: depScore = 20; break;
@@ -84,7 +94,7 @@ export async function analyze(project: ProjectInfo, ruleSet: RuleSet): Promise<P
             depScore = 100;
             if (`${err}`.includes('Invalid version')) {
                 depScore = 0;
-                metric.notes.push({
+                metric.recommendations.push({
                     type: 'Error',
                     priority: 'Normal',
                     dependency: key,
@@ -135,7 +145,7 @@ function setMetric(dep: string, i: DependencyInfo, metrics: Record<string, Metri
     }
     verbose(`${dep} is ${name} with weight ${weight}`);
     if (!metrics[name]) {
-        metrics[name] = { name, score: 0, total: 0, count: 0, notes: [], majorNote: undefined, weight };
+        metrics[name] = { name, score: 0, total: 0, count: 0, recommendations: [], majorNote: undefined, weight };
     }
     return metrics[name];
 }

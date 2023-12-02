@@ -58,14 +58,14 @@ function notes(project: ProjectResult) {
         ${project.metrics[key].majorNote}<br/><br/>
         </div>
         `;
-        } else if (project.metrics[key].notes.length > 0) {
+        } else if (project.metrics[key].recommendations.length > 0) {
             html += `
         <div class="notes">
         <h3>${title}</h3>
         </div>
         <div class="notes">
         <ul>`;
-            for (const note of project.metrics[key].notes) {
+            for (const note of project.metrics[key].recommendations) {
 
                 html += `<li><code>${note.dependency}</code> - ${note.notes}</li>`;
             }

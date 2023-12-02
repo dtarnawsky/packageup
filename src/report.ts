@@ -2,8 +2,9 @@ import { ProjectResult } from "./analyze";
 import { verbose } from "./log";
 import { outputHtml } from "./report-html";
 import { outputMd } from "./report-md";
+import { outputTxt } from "./report-txt";
 
-export type ReportOutputType = 'email' | 'html' | 'json' | 'md';
+export type ReportOutputType = 'email' | 'html' | 'json' | 'md' | 'txt';
 
 export interface ReportOptions {
     type: ReportOutputType;
@@ -16,16 +17,37 @@ export async function report(project: ProjectResult, options: ReportOptions): Pr
     verbose(`${project.project.name} scored ${project.score}%`);
     for (const key of Object.keys(project.metrics)) {
         verbose(` - ${key} scored ${project.metrics[key].score}%`);
-        for (const note of project.metrics[key].notes) {
+        for (const note of project.metrics[key].recommendations) {
             verbose(` - ${note}`);
         }
     }
     switch (options.type) {
         case 'html': return outputHtml(project);
         case 'md': return outputMd(project);
+        case 'txt': return outputTxt(project);
         case 'json': throw new Error('Not implemented');
         default: throw new Error(`Unknown type ${options.type}`);
     }
+}
+
+export function color(score: number): string {
+    if (score <= 25) {
+        return 'red';
+    } else if (score <= 50) {
+        return 'orange';
+    } else if (score <= 75) {
+        return 'yellow';
+    } else return 'green';
+}
+
+export function colorEmoji(score: number): string {
+    if (score <= 25) {
+        return '🔴';
+    } else if (score <= 50) {
+        return '🟠';
+    } else if (score <= 75) {
+        return '🟡';
+    } else return '🟢';
 }
 
 export function countIssues(project: ProjectResult): number {
@@ -34,7 +56,7 @@ export function countIssues(project: ProjectResult): number {
         if (project.metrics[key].majorNote) {
             count++;
         } else {
-            count += project.metrics[key].notes.length;
+            count += project.metrics[key].recommendations.length;
         }
     }
     return count;

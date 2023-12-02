@@ -32,5 +32,11 @@ export const IonicRuleSet: RuleSet = {
   rules: [
     { type: 'Major', dependency: '@angular/core', note: 'Migrate Angular from v@current to v@latest'  },
     { type: 'Major', dependency: '@capacitor/core', note: 'Migrate Capacitor from v@current to v@latest'  },
+    { type: 'Major', dependency: 'cordova-ios', note: 'Migrate Cordova iOS from v@current to v@latest'  },
+    { type: 'Major', dependency: 'cordova-android', note: 'Migrate Cordova Android from v@current to v@latest'  },
+
+    { type: 'Important', dependency: '@ionic-enterprise/auth', note: 'Migrate Auth Connect (@dep) from v@current to v@latest'  },
+    { type: 'Important', dependency: '@ionic/angular', note: 'Migrate Ionic Angular (@dep) from v@current to v@latest'  }
+    
   ]
 }

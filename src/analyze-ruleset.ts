@@ -21,4 +21,4 @@ export interface Rule {
     note: string
 }
 
-export type RecommendationType = 'Major' | 'Error';
+export type RecommendationType = 'Major' | 'Error' | 'Important';
