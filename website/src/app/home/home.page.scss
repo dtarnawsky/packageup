@@ -6,15 +6,25 @@ h1 {
 .gap {
   padding: 3rem;
 }
+.gap-small {
+  padding: 1rem;
+}
 
 .cmd {  
-  background-color: black;
+  background-color: #111;
   padding-top: 2rem;
   padding-bottom: 2rem;
   padding-left: 4rem;
   padding-right: 4rem;
-  border-radius: 0.5rem;
-
+  border-radius: 0.9rem;
+}
+.txt {
+  font-size: large;
+  margin: 1rem;
+}
+.term {
+  background-color: #111;
+  padding: 1rem;
 }
 
 .cline {
