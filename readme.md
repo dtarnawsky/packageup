@@ -15,4 +15,12 @@ This will create a health report outputed to the command line.
 - `--verbose` extra logging
 - `--path` path to the projects package.json otherwise uses current folder
 
-
+# Roadmap
+This are some ideas for features to be implemented:
+- Argument to send results via email
+- Only send out emails monthly
+- Add Security Vulnerabilities
+- Expose the ruleset json so you can define your own rules
+- Rules for recommended replacement packages
+- Detect deprecated packages
+- Detect unmaintained packages
