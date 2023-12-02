@@ -1,6 +1,6 @@
 {
   "name": "pkup",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": ["dist/**/*"],

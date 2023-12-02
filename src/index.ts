@@ -8,9 +8,11 @@ import { ReportOutputType, report } from "./report";
 import { postProject } from "./post";
 import { IonicRuleSet } from "./analyze-ionic-rules";
 import { join } from "path"
+import { install } from "./install";
 
 (async () => {
     const path = getArg('path', '.');
+    install(path);
     const project = await inspect(path);
     let message = '';
     if (project) {
