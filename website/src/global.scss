@@ -1,0 +1,258 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+@font-face {
+    font-family: 'Gelion Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Gelion Regular'), url('assets/fonts/gelion-regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Grotesk Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Grotesk Bold'), url('assets/fonts/grotesk-bold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Gelion Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Gelion Medium'), url('assets/fonts/gelion-medium.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Gelion Semi Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Gelion Semi Bold'), url('assets/fonts/gelion-semibold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Gelion Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Gelion Bold'), url('assets/fonts/gelion-bold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Nunito'), url('assets/fonts/nunito-extrabold.woff') format('woff');
+}
+
+
+h1 {
+    font-family: 'Gelion Bold';
+}
+
+ion-card-header {
+    padding-bottom: 0.5rem;
+}
+
+ion-card-title {
+    font-size: 20px;
+    width: 80vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+ion-card-subtitle {
+    width: 80vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+h2,
+ion-card-title {
+    font-family: 'Gelion Semi Bold';
+    font-weight: normal;
+}
+
+ion-title {
+    font-family: 'Grotesk Bold';
+    font-weight: normal;
+}
+
+.ic-txt {
+    margin-top: 10px;
+}
+
+.clamp {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.clamp3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+ion-badge {
+    margin-right: 2rem;
+}
+
+ion-text,
+ion-card-content,
+ion-card-subtitle,
+ion-segment-button,
+ion-back-button {
+    font-family: 'Gelion Regular';
+}
+
+.center {
+    padding-top: 1rem;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.vcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.text {
+    line-height: 1.5;
+    opacity: 0.5;
+}
+
+.pad-top {
+    padding-top: 5rem;
+}
+
+cdk-virtual-scroll-viewport {
+    height: 100%;
+    width: 100%;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.0);
+    }
+
+    50% {
+        transform: scale(1.9);
+    }
+
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+
+    ion-card-title,
+    ion-card-subtitle {
+        width: 60vw;
+    }
+
+    ion-content.app-page {
+        --padding-start: 10vw;
+        --padding-end: 10vw;
+        --overflow: hidden;
+    }
+
+    ion-tab-bar {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    ion-icon {
+        font-size: xx-large;
+    }
+
+    ion-tab-button {
+        font-size: large;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}
+
+@media (min-width:801px) {
+    .border {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 20px;
+        margin-top: 2rem;
+    }
+}
+
+.file-input {
+    display: none;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.top-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    width: 8rem;
+}
+
+.top-button:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+    cursor: pointer;
+}
+
+ion-item:last-child {
+    --inner-border-width: 0;
+}

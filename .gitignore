@@ -44,3 +44,5 @@ yarn.lock
 
 package-health.*
 *.tgz
+# Local Netlify folder
+.netlify

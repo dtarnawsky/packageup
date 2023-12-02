@@ -1,0 +1,7 @@
+{
+  "name": "dust-web",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
