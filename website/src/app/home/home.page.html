@@ -1,10 +1,13 @@
 <ion-content color="primary" [fullscreen]="true">
-  <a href="https://github.com/dtarnawsky/packageup" target="_blank"><ion-icon style="float: right"
-      name="logo-github"></ion-icon></a>
+  <a href="https://github.com/dtarnawsky/packageup" target="_blank">
+    <ion-icon style="float: right; position: absolute;" name="logo-github"></ion-icon></a>
   <div class="vcenter rows">
-    <h1>packageup</h1>
-    <ion-text>Report your <b>project health</b></ion-text>
-    <div class="gap"></div>
+    <div class="panel">
+      <h1>packageup</h1>
+      <ion-text>Report your <b>project health</b></ion-text>
+      <div class="gap-small cornered"></div>
+    </div>
+    <div class="gap-small"></div>
 
     <ion-text><b>Get Started</b></ion-text>
     <ion-text class="txt">Run this command at the terminal.</ion-text>
@@ -13,9 +16,11 @@
         <ion-text style="opacity: 0.5; font-weight: bolder; padding-right: 1rem">&gt;</ion-text>
         <input style="display: none;" id="cmd" type="text" value="npx pkup" id="cmd">
         <span class="cline">npx pkup</span>
-        <ion-button color="medium" fill="clear" (click)="copy()"><ion-icon class="copy" name="copy-outline"></ion-icon></ion-button>
+        <ion-button color="medium" fill="clear" (click)="copy()"><ion-icon class="copy"
+            name="copy-outline"></ion-icon></ion-button>
       </div>
     </div>
+
     <div class="gap"></div>
     <ion-text><b>Reporting</b></ion-text>
     <ion-text class="txt">Report to the terminal your score and recommendations.</ion-text>
@@ -59,12 +64,21 @@
       - typescript - Update from v4 to v5<br/>
     </code>
     </div>
-    <!-- <ion-button href="mailto:damian@dust.events" size="large" fill="round">Contact Us</ion-button> -->
-    <div class="gap"></div>
-    <ion-text><b>Privacy</b></ion-text>
-    <ion-text class="txt">The <b>pkup</b> CLI tool does not capture any information about your project. It just reports
-      it.</ion-text>
-    <div class="gap"></div>
-    <div class="gap"></div>
+    <div class="gap-small"></div>
+    <ion-text><b>How Does It Work?</b></ion-text>
+    <ion-text class="txt"><b>pkup</b> scores your project by grouping your dependencies into categories.
+     These are weighted and scored based on factors like how many versions you are behind, whether the
+    dependency is unmaintained etc.</ion-text>
+    <div class="panel">
+      <div class="gap-small cornered-b"></div>
+      <div class="bpad rows">
+        <div class="gap-small"></div>
+        <ion-text><b>Privacy</b></ion-text>
+        <ion-text class="txt">The <b>pkup</b> CLI tool does not capture any information about your project. It just
+          reports
+          it.</ion-text>
+        <div class="gap-small"></div>
+      </div>
+    </div>
   </div>
 </ion-content>

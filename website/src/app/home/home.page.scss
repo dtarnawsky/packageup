@@ -3,14 +3,39 @@ h1 {
   font-family: 'Nunito';
 }
 
+.panel {
+  background-color: #37474f;
+  width: 100%;
+  margin-left: 10vw;
+  margin-right: 10vw;
+}
+
+.cornered {
+  margin-top: 2rem;
+  border-radius: 10rem 10rem 0 0;
+  background-color: var(--ion-color-primary);
+  width: 100%;
+}
+
+.cornered-b {
+  border-radius: 0 0 10rem 10rem;
+  background-color: var(--ion-color-primary);
+  width: 100%;
+}
+
+.panel2 {
+  width: 100%;
+}
+
 .gap {
   padding: 3rem;
 }
+
 .gap-small {
   padding: 1rem;
 }
 
-.cmd {  
+.cmd {
   background-color: #171717;
   padding-top: 1rem;
   padding-bottom: 0.5rem;
@@ -52,8 +77,8 @@ ion-icon {
 }
 
 .cline {
-  font-size: xx-large;
-  font-family:'Courier New', Courier, monospace;
+  font-size: 3rem;
+  font-family: 'Courier New', Courier, monospace;
   font-weight: 600;
 }
 
@@ -73,4 +98,31 @@ ion-icon {
 
 a {
   color: white;
+}
+
+@media (max-width:801px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  ion-text {
+    font-size: 1.5rem;
+  }
+
+  .txt {
+    font-size: 1.2rem;
+  }
+
+  code {
+    font-size: 0.8rem;
+  }
+
+  .cline {
+    font-size: 2rem;
+  }
+
+  .bpad {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }
