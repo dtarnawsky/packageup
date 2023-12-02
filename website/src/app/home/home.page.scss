@@ -11,35 +11,50 @@ h1 {
 }
 
 .cmd {  
-  background-color: #111;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  background-color: #171717;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
   padding-left: 4rem;
-  padding-right: 4rem;
-  border-radius: 0.9rem;
+  padding-right: 0rem;
 }
+
+ion-text {
+  font-size: 3rem;
+}
+
 .txt {
-  font-size: large;
-  margin: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  max-width: 700px;
 }
-.term {
-  background-color: #111;
+
+.copy {
+  float: right;
+  margin-top: -0.5rem;
+  font-size: 2rem;
+  opacity: 0.2;
+}
+
+ion-icon {
+  font-size: 3rem;
   padding: 1rem;
+}
+
+.term {
+  background-color: #171717;
+  padding: 2rem;
+  text-align: left;
+}
+
+.shadow {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 0.5rem;
 }
 
 .cline {
   font-size: xx-large;
   font-family:'Courier New', Courier, monospace;
   font-weight: 600;
-}
-
-ion-button {
-  color: var(--ion-color-primary);
-  --background: white;
-}
-
-ion-text {
-  font-size: xx-large;
 }
 
 .flex {
@@ -49,16 +64,11 @@ ion-text {
 }
 
 .rows {
-  margin-top: -2rem;
   flex-direction: column;
-  padding-left: 10vw;
-  padding-right: 10vw;
   text-align: center;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  width: 100%;
-  height: 100%;
 }
 
 a {
