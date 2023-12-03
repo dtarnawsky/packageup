@@ -12,7 +12,10 @@ import { install } from "./install";
 
 (async () => {
     const path = getArg('path', '.');
-    install(path);
+
+    if (getArg('install', '-') !== '-') {
+        install(path);
+    }
     const project = await inspect(path);
     let message = '';
     if (project) {

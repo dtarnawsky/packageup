@@ -10,6 +10,7 @@ This will create a health report outputed to the command line.
 ## Arguments
 - `--type html` - This will generate a `package-health.html` file.
 - `--type md` - This will generate a `package-health.md` file.
+- `--install` - Create a `postinstall` script so that `pkup` runs when node modules are installed
 
 ## Advanced Arguments
 - `--verbose` extra logging

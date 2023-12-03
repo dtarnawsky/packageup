@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.4
+- Add `install` argument to install into package.json
+
 ## 0.0.3
 - Security audit peformed with npm audit
 
