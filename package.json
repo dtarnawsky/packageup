@@ -3,8 +3,12 @@
   "version": "0.0.3",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
-  "files": ["dist/**/*"],
-  "bin": {"pkup": "./dist/index.js"},
+  "files": [
+    "dist/**/*"
+  ],
+  "bin": {
+    "pkup": "./dist/index.js"
+  },
   "scripts": {
     "build": "eslint . --ext .ts && tsc",
     "lint": "eslint . --ext .ts",
@@ -18,22 +22,23 @@
     "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
     "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",
     "sample5": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-create-react'",
-    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"
+    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'",
+    "postinstall": "npx pkup"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.4",
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
-    "@typescript-eslint/parser": "^5.41.0",
+    "@types/node": "^20.10.3",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.26.0",
     "jest": "^29.2.2",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^4.8.4"
+    "typescript": "5.3.2"
   },
   "dependencies": {
     "@types/tiny-json-http": "^7.3.4",
