@@ -1,5 +1,6 @@
-<ion-content color="primary" [fullscreen]="true">
-  <a href="https://github.com/dtarnawsky/packageup" target="_blank">
+<!-- <ion-content color="primary" [fullscreen]="true"> -->
+<div class="page">
+  <a aria-label="Github repo" href="https://github.com/dtarnawsky/packageup" target="_blank">
     <ion-icon style="float: right; position: absolute;" name="logo-github"></ion-icon></a>
   <div class="vcenter rows">
     <div class="panel">
@@ -7,6 +8,7 @@
       <ion-text>Report your <b>project health</b></ion-text>
       <div class="gap-small cornered"></div>
     </div>
+    <div class="panel-b rows">
     <div class="gap-small"></div>
 
     <ion-text><b>Get Started</b></ion-text>
@@ -16,8 +18,8 @@
         <ion-text style="opacity: 0.5; font-weight: bolder; padding-right: 1rem">&gt;</ion-text>
         <input style="display: none;" id="cmd" type="text" value="npx pkup" id="cmd">
         <span class="cline">npx pkup</span>
-        <ion-button color="medium" fill="clear" (click)="copy()"><ion-icon class="copy"
-            name="copy-outline"></ion-icon></ion-button>
+        <ion-button aria-label="copy npx pkup to clipboard" color="medium" fill="clear" (click)="copy()"><ion-icon
+            class="copy" name="copy-outline"></ion-icon></ion-button>
       </div>
     </div>
 
@@ -66,9 +68,10 @@
     </div>
     <div class="gap-small"></div>
     <ion-text><b>How Does It Work?</b></ion-text>
-    <ion-text class="txt"><b>pkup</b> scores your project by grouping your dependencies into categories.
-     These are weighted and scored based on factors like how many versions you are behind, whether the
-    dependency is unmaintained etc.</ion-text>
+    <ion-text class="txt bpad"><b>pkup</b> scores your project by grouping your dependencies into categories.
+      These are weighted and scored based on factors like how many versions you are behind, whether the
+      dependency is unmaintained etc.</ion-text>
+      </div>
     <div class="panel">
       <div class="gap-small cornered-b"></div>
       <div class="bpad rows">
@@ -81,4 +84,5 @@
       </div>
     </div>
   </div>
-</ion-content>
+</div>
+<!-- </ion-content> -->

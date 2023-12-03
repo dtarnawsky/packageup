@@ -158,3 +158,16 @@ ion-back-button {
     padding-top: 5rem;
 }
 
+html {
+    overscroll-behavior: none;
+    background-color: #37474f;
+    color: white;
+}
+
+body {
+    background-color: #37474f;
+}
+
+.page {
+    overflow-y: scroll;
+}

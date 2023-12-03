@@ -50,6 +50,16 @@ export function colorEmoji(score: number): string {
     } else return '🟢';
 }
 
+export function colorSeverity(severity: string | undefined): string {
+    switch (severity) {
+        case 'critical': return '🔴';
+        case 'high': return '🟠';
+        case 'moderate': return '🟡';
+        case 'low': return '⚪';
+        default: return '-';
+    }
+}
+
 export function countIssues(project: ProjectResult): number {
     let count = 0;
     for (const key of Object.keys(project.metrics)) {

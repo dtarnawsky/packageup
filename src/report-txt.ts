@@ -1,6 +1,7 @@
 import { Metric, ProjectResult, Recommendation } from "./analyze";
+import { DependencyInfo } from "./inspect";
 import { write } from "./log";
-import { colorEmoji, countIssues, toTitleCase } from "./report";
+import { colorEmoji, colorSeverity, countIssues, toTitleCase } from "./report";
 
 export function outputTxt(result: ProjectResult): string {
     const issues = countIssues(result);
@@ -15,12 +16,50 @@ export function outputTxt(result: ProjectResult): string {
     for (const key of metricList(result.metrics)) {
         write(`${colorEmoji(result.metrics[key].score)} ${key} - ${result.metrics[key].score}%`);
     }
+    const securitySeverity = highestSeverity(result.security);
+    let securityNote = 'No issues';
+    let colorSecurity = colorSeverity(securitySeverity);
+    if (securitySeverity == '') {
+        colorSecurity = '🟢';
+    } else {
+        securityNote = `${toTitleCase(securitySeverity)} severity issues`;
+    }
+    if (result.project.securityAuditFailed) {
+        colorSecurity = '🔴';
+        securityNote = `Security Audit Failed`;
+    }
+    if (security.length > 0) {
+        write(`${colorSecurity} Security - ${securityNote}`);
+    }
     if (issues) {
         write(' ');
         write(`Improve your project by addressing these items:`);
         notes(result);
     }
+
+    if (result.security.length > 0) {
+        write(' ');
+        write(`Your project has Security Vulnerabilities:`);
+        security(result);
+        write(`Run "npm audit" to investigate further.`);
+    }
     return '';
+}
+
+function highestSeverity(issues: DependencyInfo[]): string {
+   if (issues.find(i => i.security?.severity == 'critical')) {
+    return 'critical';
+   }
+   if (issues.find(i => i.security?.severity == 'high')) {
+    return 'high';
+   }
+   if (issues.find(i => i.security?.severity == 'moderate')) {
+    return 'moderate';
+   }
+   if (issues.find(i => i.security?.severity == 'low')) {
+    return 'low';
+   }
+   return '';
 }
 
 function metricList(metrics: Record<string, Metric>): string[] {
@@ -28,8 +67,14 @@ function metricList(metrics: Record<string, Metric>): string[] {
     return values.sort((a: string, b: string) => metrics[a].score - metrics[b].score);
 }
 
-function byPriority(recommendations: Recommendation[]): Recommendation[] {    
+function byPriority(recommendations: Recommendation[]): Recommendation[] {
     return recommendations.sort((a: Recommendation, b: Recommendation) => a.priority.localeCompare(b.priority));
+}
+
+function security(result: ProjectResult) {
+    for (const dep of result.security) {
+        write(`${colorSeverity(dep.security?.severity)} ${dep.name} - ${dep.security?.title}`);
+    }
 }
 
 function notes(result: ProjectResult) {

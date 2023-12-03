@@ -3,6 +3,7 @@ import { hasArg } from "./args";
 import { verbose, writeError } from "./log";
 import { getAsJson, getAsString } from "./utilities";
 import { existsSync, readFileSync, readdirSync } from "fs";
+import { audit } from "./audit";
 
 export async function inspect(folder: string): Promise<ProjectInfo | undefined> {
     verbose(`Inspecting "${folder}"...`);
@@ -21,12 +22,18 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
     const remoteUrl = cleanUrl(await getAsString(`git config --get remote.origin.url`, folder));
 
 
+    const securityIssues = await audit(folder, Object.keys(npmList.dependencies));
+
     verbose(`Found "${npmList.name}" v${npmList.version}`);
     const dependencies: Record<string, DependencyInfo> = {};
     for (const key of Object.keys(npmList.dependencies)) {
         const dep: ListDependency = npmList.dependencies[key];
         // dep.resolved contains the url to the package. Eg: https://registry.npmjs.org/zone.js/-/zone.js-0.14.2.tgz
-        const packageInfo: DependencyInfo = { current: dep.version, latest: dep.version, pluginType: getPluginType(key, folder) };
+        const packageInfo: DependencyInfo = { 
+            name: key, current: dep.version, latest: dep.version, 
+            pluginType: getPluginType(key, folder), 
+            security: securityIssues?.find(a => a.name == key) 
+        };
         if (!dep.extraneous) {
             dependencies[key] = packageInfo;
         }
@@ -43,7 +50,8 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
         name: npmList.name,
         version: npmList.version,
         remoteUrl,
-        dependencies
+        dependencies,
+        securityAuditFailed: (securityIssues == undefined)
     };
 }
 
@@ -114,11 +122,21 @@ export interface ProjectInfo {
     version: string;
     remoteUrl: string | undefined;
     dependencies: Record<string, DependencyInfo>;
+    securityAuditFailed: boolean;
 }
 export interface DependencyInfo {
+    name: string;
     current: string; // eg 2.6.2
     latest: string; // eg 3.0.0
     pluginType: PluginType;
+    security: SecurityVulnerability | undefined;
+}
+
+export interface SecurityVulnerability {
+    name: string;
+    severity: string;
+    url: string;
+    title: string;
 }
 
 export type PluginType = 'Dependency' | 'Capacitor' | 'Cordova';
