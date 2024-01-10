@@ -9,6 +9,7 @@ export interface ProjectResult {
     score: number; // Overall project score
     metrics: Record<string, Metric>; // Score by group
     security: DependencyInfo[];
+    issues: DependencyInfo[];
 }
 
 export interface Metric {
@@ -33,7 +34,7 @@ export type PriorityType = 'Normal' | 'High';
 
 export async function analyze(project: ProjectInfo, ruleSet: RuleSet): Promise<ProjectResult> {
     validate(ruleSet);
-    const result: ProjectResult = { project, score: 0, metrics: {}, filename: undefined, security: [] };
+    const result: ProjectResult = { project, score: 0, metrics: {}, filename: undefined, security: [], issues: [] };
     let total = 0;
     let score = 0;
     let depScore = 0;
@@ -48,6 +49,9 @@ export async function analyze(project: ProjectInfo, ruleSet: RuleSet): Promise<P
         try {
             if (dep.security) {               
                 result.security.push(dep);
+            }
+            if (dep.issue) {
+                result.issues.push(dep);
             }
             const majorDiff = major(dep.latest) - major(dep.current);
             if (majorDiff > 0) {

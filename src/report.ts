@@ -42,20 +42,20 @@ export function color(score: number): string {
 
 export function colorEmoji(score: number): string {
     if (score <= 25) {
-        return '🔴';
+        return '🟥';
     } else if (score <= 50) {
-        return '🟠';
+        return '🟧';
     } else if (score <= 75) {
-        return '🟡';
-    } else return '🟢';
+        return '🟨';
+    } else return '🟩';
 }
 
 export function colorSeverity(severity: string | undefined): string {
     switch (severity) {
-        case 'critical': return '🔴';
-        case 'high': return '🟠';
-        case 'moderate': return '🟡';
-        case 'low': return '⚪';
+        case 'critical': return '🟥';
+        case 'high': return '🟧';
+        case 'moderate': return '🟨';
+        case 'low': return '⬜';
         default: return '-';
     }
 }

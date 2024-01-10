@@ -1,4 +1,6 @@
 # Changelog
+## 0.0.5
+- Display unmaintained dependencies
 
 ## 0.0.4
 - Add `install` argument to install into package.json

@@ -1,9 +1,10 @@
 import { join } from "path";
 import { hasArg } from "./args";
 import { verbose, writeError } from "./log";
-import { getAsJson, getAsString } from "./utilities";
+import { daysAgo, getAsJson, getAsString, timePeriod } from "./utilities";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import { audit } from "./audit";
+import { getNpmInfo } from "./npm-info";
 
 export async function inspect(folder: string): Promise<ProjectInfo | undefined> {
     verbose(`Inspecting "${folder}"...`);
@@ -28,11 +29,32 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
     const dependencies: Record<string, DependencyInfo> = {};
     for (const key of Object.keys(npmList.dependencies)) {
         const dep: ListDependency = npmList.dependencies[key];
+        verbose(`Inspecting ${key}`);
+        const npmInfo = await getNpmInfo(key, false);
+        let issue: Issue | undefined;
+        // example: released = 2016-03-17T15:16:31.913Z
+        //const released = npmInfo.time[dep.version];
+        if (npmInfo) {
+            const keys = Object.keys(npmInfo.time);
+            const modified = npmInfo.time[keys[keys.length - 1]];
+            let lastReleased = 0;
+            lastReleased = daysAgo(new Date(modified));
+
+            
+
+            if (lastReleased > 365) {
+                issue = { type: 'maintenance', title: `${timePeriod(lastReleased)} since last release`, severity: 'critical' };
+            } else if (lastReleased > 180) {
+                issue = { type: 'potentialUnmaintained', title: `${timePeriod(lastReleased)} since last release`, severity: 'moderate' };
+            }
+        }
+
         // dep.resolved contains the url to the package. Eg: https://registry.npmjs.org/zone.js/-/zone.js-0.14.2.tgz
-        const packageInfo: DependencyInfo = { 
-            name: key, current: dep.version, latest: dep.version, 
-            pluginType: getPluginType(key, folder), 
-            security: securityIssues?.find(a => a.name == key) 
+        const packageInfo: DependencyInfo = {
+            name: key, current: dep.version, latest: dep.version,
+            pluginType: getPluginType(key, folder),
+            security: securityIssues?.find(a => a.name == key),
+            issue
         };
         if (!dep.extraneous) {
             dependencies[key] = packageInfo;
@@ -130,7 +152,16 @@ export interface DependencyInfo {
     latest: string; // eg 3.0.0
     pluginType: PluginType;
     security: SecurityVulnerability | undefined;
+    issue: Issue | undefined
 }
+
+export interface Issue {
+    title: string;
+    type: IssueType;
+    severity: string;
+}
+
+export type IssueType = 'maintenance' | 'deprecated' | 'potentialUnmaintained';
 
 export interface SecurityVulnerability {
     name: string;

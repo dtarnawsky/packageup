@@ -24,6 +24,21 @@ export async function getAsJson(command: string, folder: string) {
     }
 }
 
+export function timePeriod(days: number): string {
+    if (days < 365) {
+      return `${days} days`;
+    }
+    const years = days / 365.0;
+    return `${Math.round(years * 10) / 10} years`;
+  }
+
+export function daysAgo(d: Date): number {
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const today = new Date();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return Math.round(Math.abs(((d as any) - (today as any)) / oneDay));
+  }
+
 export async function getAsString(command: string, folder: string): Promise<string | undefined> {
     try {
         return await getRunOutput(command, folder);
