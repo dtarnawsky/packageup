@@ -1,6 +1,6 @@
 {
   "name": "pkup",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": [
@@ -22,12 +22,13 @@
     "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
     "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",
     "sample5": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-create-react'",
-    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"    
+    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cli-spinner": "^0.2.3",
     "@types/jest": "^29.2.0",
     "@types/node": "^20.10.3",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
@@ -41,6 +42,7 @@
   },
   "dependencies": {
     "@types/tiny-json-http": "^7.3.4",
+    "cli-spinner": "^0.2.10",
     "semver": "7.5.4",
     "tiny-json-http": "^7.5.1"
   }

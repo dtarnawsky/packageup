@@ -1,4 +1,7 @@
 # Changelog
+## 0.0.6
+- Display progress
+
 ## 0.0.5
 - Display unmaintained dependencies
 

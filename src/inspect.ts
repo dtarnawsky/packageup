@@ -1,35 +1,47 @@
 import { join } from "path";
 import { hasArg } from "./args";
-import { verbose, writeError } from "./log";
+import { verbose, write, writeError } from "./log";
 import { daysAgo, getAsJson, getAsString, timePeriod } from "./utilities";
 import { existsSync, readFileSync, readdirSync } from "fs";
 import { audit } from "./audit";
 import { getNpmInfo } from "./npm-info";
+import { Spinner } from "cli-spinner";
 
 export async function inspect(folder: string): Promise<ProjectInfo | undefined> {
+    const spinner = new Spinner(`Inspecting "${folder}"...`);
+    spinner.setSpinnerString('⠄⠆⠇⠋⠙⠸⠰⠠⠰⠸⠙⠋⠇⠆');
     verbose(`Inspecting "${folder}"...`);
+    spinner.start();
+    spinner.setSpinnerTitle(`Inspecting outdated dependencies...`);
     const npmOutdated = await getAsJson(`npm outdated --json`, folder);
     if (!npmOutdated) {
         writeError(`Unable to inspect "${folder}". "npm outdated" failed.`);
+        spinner.stop();
         return undefined;
     }
 
+    spinner.setSpinnerTitle(`Inspecting package list...`);
     const npmList = await getAsJson(`npm list --json`, folder);
     if (!npmList) {
         writeError(`Unable to inspect "${folder}". "npm list" failed.`);
+        spinner.stop();
         return undefined;
     }
 
     const remoteUrl = cleanUrl(await getAsString(`git config --get remote.origin.url`, folder));
 
-
+    spinner.setSpinnerTitle(`Auditing for security vulnerabilities...`);
     const securityIssues = await audit(folder, Object.keys(npmList.dependencies));
 
     verbose(`Found "${npmList.name}" v${npmList.version}`);
     const dependencies: Record<string, DependencyInfo> = {};
+    const length = Object.keys(npmList.dependencies).length;
+    let count = 0;
+
     for (const key of Object.keys(npmList.dependencies)) {
         const dep: ListDependency = npmList.dependencies[key];
-        verbose(`Inspecting ${key}`);
+        count++;
+        spinner.setSpinnerTitle(`Inspecting ${Math.trunc(count * 100.0 / length)}%`);
         const npmInfo = await getNpmInfo(key, false);
         let issue: Issue | undefined;
         // example: released = 2016-03-17T15:16:31.913Z
@@ -40,11 +52,11 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
             let lastReleased = 0;
             lastReleased = daysAgo(new Date(modified));
 
-            
 
-            if (lastReleased > 365) {
+
+            if (lastReleased > 730) {
                 issue = { type: 'maintenance', title: `${timePeriod(lastReleased)} since last release`, severity: 'critical' };
-            } else if (lastReleased > 180) {
+            } else if (lastReleased > 365) {
                 issue = { type: 'potentialUnmaintained', title: `${timePeriod(lastReleased)} since last release`, severity: 'moderate' };
             }
         }
@@ -67,7 +79,9 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
     if (hasArg('verbose')) {
         verbose(JSON.stringify(dependencies));
     }
-
+    spinner.setSpinnerTitle(` `);
+    write(' ');
+    spinner.stop();
     return {
         name: npmList.name,
         version: npmList.version,

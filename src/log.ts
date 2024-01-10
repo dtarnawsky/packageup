@@ -1,6 +1,7 @@
 import { hasArg } from "./args";
 
 export function writeError(message: string) {
+    console.log('');
     console.error('Error: '+message);
 }
 
