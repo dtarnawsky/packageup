@@ -38,21 +38,20 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
     const length = Object.keys(npmList.dependencies).length;
     let count = 0;
 
-    for (const key of Object.keys(npmList.dependencies)) {
-        const dep: ListDependency = npmList.dependencies[key];
+    for (const dependency of Object.keys(npmList.dependencies)) {
+        const dep: ListDependency = npmList.dependencies[dependency];
         count++;
         spinner.setSpinnerTitle(`Inspecting ${Math.trunc(count * 100.0 / length)}%`);
-        const npmInfo = await getNpmInfo(key, false);
+        const npmInfo = await getNpmInfo(dependency, false);
+
         let issue: Issue | undefined;
-        // example: released = 2016-03-17T15:16:31.913Z
-        //const released = npmInfo.time[dep.version];
         if (npmInfo) {
-            const keys = Object.keys(npmInfo.time);
-            const modified = npmInfo.time[keys[keys.length - 1]];
+            const latestVersion = npmInfo['dist-tags'].latest;
+            const modified = npmInfo.time[latestVersion];
             let lastReleased = 0;
-            lastReleased = daysAgo(new Date(modified));
-
-
+            if (modified) {
+                lastReleased = daysAgo(new Date(modified));
+            }
 
             if (lastReleased > 730) {
                 issue = { type: 'maintenance', title: `${timePeriod(lastReleased)} since last release`, severity: 'critical' };
@@ -63,13 +62,13 @@ export async function inspect(folder: string): Promise<ProjectInfo | undefined> 
 
         // dep.resolved contains the url to the package. Eg: https://registry.npmjs.org/zone.js/-/zone.js-0.14.2.tgz
         const packageInfo: DependencyInfo = {
-            name: key, current: dep.version, latest: dep.version,
-            pluginType: getPluginType(key, folder),
-            security: securityIssues?.find(a => a.name == key),
+            name: dependency, current: dep.version, latest: dep.version,
+            pluginType: getPluginType(dependency, folder),
+            security: securityIssues?.find(a => a.name == dependency),
             issue
         };
         if (!dep.extraneous) {
-            dependencies[key] = packageInfo;
+            dependencies[dependency] = packageInfo;
         }
     }
     for (const key of Object.keys(npmOutdated)) {

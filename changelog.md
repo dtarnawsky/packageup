@@ -1,4 +1,7 @@
 # Changelog
+## 0.0.7
+- Fix datetimes from npm when checking latest version
+
 ## 0.0.6
 - Display progress
 

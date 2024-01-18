@@ -1,6 +1,6 @@
 {
   "name": "pkup",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": [
@@ -19,10 +19,11 @@
     "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
     "sample-html": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd' --type html",
     "sample2": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/amtrak-01-25-2023'",
-    "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",
+    "sample3": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/caterpillar-01-09-2023b'",    
     "sample4": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/dhs-11-22-2023c'",
     "sample5": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-create-react'",
-    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'"
+    "sample6": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-vue-v7'",
+    "sample7": "npm run build && node dist/index.js --path '/Volumes/CodeDrive/Code/cs-react-test'"
   },
   "keywords": [],
   "author": "",
