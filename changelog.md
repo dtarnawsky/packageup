@@ -1,5 +1,5 @@
 # Changelog
-## 0.0.7
+## 0.0.8
 - Fix datetimes from npm when checking latest version
 
 ## 0.0.6

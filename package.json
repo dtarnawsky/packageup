@@ -1,6 +1,6 @@
 {
   "name": "pkup",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Health reports for your project to help you keep it up to date.",
   "main": "index.js",
   "files": [
@@ -14,7 +14,7 @@
     "lint": "eslint . --ext .ts",
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "ts-node ./src/index.ts",
-    "test": "jest",
+    "test": "jest",    
     "deploy-worker": "cd worker/packageup && npm run deploy",
     "sample": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd'",
     "sample-html": "npm run build && node dist/index.js --path '/Users/damian/Sample Code/ttitd' --type html",
